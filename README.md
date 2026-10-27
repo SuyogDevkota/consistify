@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Consistify
 
 Private group-based consistency tracker built with the **MERN** stack (MongoDB, Express, React, Node).
@@ -115,3 +116,7 @@ The React app reuses that CSS language; interactions are React state/hooks, not 
 - In-app push/email **notifications** are not a full product; the group activity feed covers events.
 - Completions are allowed for **today and yesterday** in the group timezone only (no arbitrary historical backfill).
 - Existing databases must run the task-completion index migration before deploying the multi-completion update: `npm run migrate:completion-occurrences --prefix server`.
+=======
+# consistify
+A consistency traker website made for groups 
+>>>>>>> 4788739ee1499b7393337b2f4bd3974d03b8f720
