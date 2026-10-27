@@ -1,0 +1,134 @@
+/* App-level additions on top of reference design */
+
+.skeleton {
+  background: linear-gradient(90deg, #111d30 25%, #1a2a46 50%, #111d30 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease infinite;
+  border-radius: 8px;
+  min-height: 18px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.recharts-default-legend {
+  color: #aab8ce !important;
+}
+
+.recharts-cartesian-axis-tick-value {
+  fill: #7f90aa;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+.member-list .member-row {
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 12px;
+}
+
+.member-info {
+  min-width: 0;
+}
+
+.member-meta {
+  display: block;
+  font-size: 9px;
+  color: #8291ab;
+  margin-top: 3px;
+  text-transform: capitalize;
+}
+
+.member-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.skeleton-stack {
+  padding: 8px 0;
+}
+
+input[type='color'] {
+  height: 42px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+button.calendar-day {
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+button.calendar-day.selected-day {
+  outline: 1px solid var(--blue);
+}
+
+.task-occurrence-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.task-undo {
+  width: 25px;
+  height: 25px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--panel2);
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.task-undo:hover {
+  color: var(--text);
+  border-color: var(--blue);
+}
+
+.category-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.category-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.category-actions button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 4px;
+}
+
+.category-actions button:not(:disabled):hover {
+  color: var(--text);
+}
+
+.category-actions button:disabled {
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

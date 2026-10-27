@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consistify — Build Better Habits Together</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#" data-page="landing"><span class="brand-mark">↗</span><span>consistify<small>Better, every day.</small></span></a>
+    <nav id="mainNav" class="nav-links">
+      <a href="#features">Features</a><a href="#how">How it works</a>
+    </nav>
+    <div class="top-actions" id="topActions">
+      <button class="btn btn-quiet" data-open="login">Log in</button>
+      <button class="btn btn-primary" data-open="signup">Get started <span>↗</span></button>
+    </div>
+    <button class="menu-button" id="menuButton" aria-label="Toggle navigation">☰</button>
+  </header>
+
+  <main>
+    <section id="landingPage" class="page active">
+      <div class="hero wrap">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="pulse"></span> YOUR PROGRESS, YOUR COMMUNITY</div>
+          <h1>Small steps.<br><span>Serious progress.</span></h1>
+          <p class="hero-text">Build consistency with people who keep you accountable. Track your work, celebrate streaks, and watch your progress grow — together.</p>
+          <div class="hero-buttons"><button class="btn btn-primary btn-large" data-open="signup">Create your community <span>↗</span></button><button class="btn btn-outline btn-large" id="exploreButton">Explore the features ↓</button></div>
+          <div class="social-proof"><div class="avatar-stack"><span>A</span><span>R</span><span>S</span><span>+</span></div><div><strong>Consistency is a team sport.</strong><small>Make progress visible. Keep each other going.</small></div></div>
+        </div>
+        <div class="hero-visual">
+          <div class="mock-window">
+            <div class="mock-top"><div class="window-dots"><i></i><i></i><i></i></div><span>COMMUNITY OVERVIEW</span><span class="mock-live"><b></b> Live preview</span></div>
+            <div class="mock-content">
+              <div class="mock-welcome"><div><small>MONDAY, OCTOBER 26</small><h3>You're building momentum ✨</h3></div><div class="mock-avatar">Y</div></div>
+              <div class="mock-stats">
+                <div class="mock-stat"><span>Your points</span><strong class="blue-text">120</strong><small>↑ 18% this week</small></div>
+                <div class="mock-stat"><span>Group streak</span><strong class="purple-text">8 days</strong><small>Keep it going</small></div>
+              </div>
+              <div class="mock-chart-card"><div class="card-heading"><div><strong>Weekly progress</strong><small>Points earned each day</small></div><span class="tiny-pill">This week</span></div>
+                <svg viewBox="0 0 460 155" class="chart" role="img" aria-label="Example progress chart">
+                  <defs><linearGradient id="blueArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5487ff" stop-opacity=".35"/><stop offset="1" stop-color="#5487ff" stop-opacity="0"/></linearGradient></defs>
+                  <g stroke="#26344c" stroke-dasharray="3 5"><path d="M18 25H445"/><path d="M18 60H445"/><path d="M18 95H445"/><path d="M18 130H445"/></g>
+                  <path d="M18 112 C55 102,70 110,88 91 S140 78,160 96 S220 100,244 69 S292 38,315 65 S355 105,380 72 S420 52,445 35 L445 132 L18 132Z" fill="url(#blueArea)"/>
+                  <path d="M18 112 C55 102,70 110,88 91 S140 78,160 96 S220 100,244 69 S292 38,315 65 S355 105,380 72 S420 52,445 35" fill="none" stroke="#6c95ff" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M18 123 C55 117,70 90,88 106 S140 112,160 109 S220 80,244 91 S292 95,315 82 S355 65,380 90 S420 83,445 70" fill="none" stroke="#bd76f6" stroke-width="2.5" stroke-linecap="round"/>
+                  <g fill="#9baac4" font-size="10"><text x="18" y="150">Mon</text><text x="88" y="150">Tue</text><text x="158" y="150">Wed</text><text x="228" y="150">Thu</text><text x="298" y="150">Fri</text><text x="368" y="150">Sat</text><text x="430" y="150">Sun</text></g>
+                </svg>
+                <div class="chart-legend"><span><i class="legend-blue"></i>You</span><span><i class="legend-purple"></i>Community average</span></div>
+              </div>
+              <div class="mock-bottom"><div class="mock-task"><span class="task-icon">✦</span><div><strong>Today's focus</strong><small>Physics revision</small></div><span class="mock-check">✓</span></div><div class="mock-task"><span class="task-icon purple-icon">◎</span><div><strong>Daily goal</strong><small>3 of 4 tasks</small></div><span class="goal-number">75%</span></div></div>
+            </div>
+          </div>
+          <div class="float-card float-one"><span class="float-icon">🔥</span><div><strong>8 day streak!</strong><small>Consistency looks good on you.</small></div></div>
+          <div class="float-card float-two"><span class="float-icon purple-icon">↗</span><div><strong>+24 points</strong><small>Progress, not perfection.</small></div></div>
+        </div>
+      </div>
+      <section id="features" class="section wrap">
+        <div class="section-title"><div class="eyebrow">EVERYTHING IN ONE PLACE</div><h2>Make showing up <span>your superpower.</span></h2><p>Simple tools to turn good intentions into a routine that lasts.</p></div>
+        <div class="feature-grid">
+          <article class="feature-card"><div class="feature-icon icon-blue">▤</div><h3>Track what matters</h3><p>Create the tasks that fit your goals — from school subjects to reading, coding, fitness, or personal habits.</p></article>
+          <article class="feature-card"><div class="feature-icon icon-purple">⌁</div><h3>See your progress</h3><p>Daily points, cumulative graphs, streaks, and a calendar make your consistency easy to understand.</p></article>
+          <article class="feature-card"><div class="feature-icon icon-pink">♧</div><h3>Grow as a community</h3><p>Create a private group and invite the people you trust. Your group's activity stays within your community.</p></article>
+        </div>
+      </section>
+      <section id="how" class="how-section"><div class="wrap how-inner"><div><div class="eyebrow">THREE SIMPLE STEPS</div><h2>Your next chapter starts <span>with today.</span></h2></div><div class="steps"><div><b>01</b><section><h3>Create a group</h3><p>Give your community a name and set the goals.</p></section></div><div><b>02</b><section><h3>Invite your people</h3><p>Share a group code with friends or teammates.</p></section></div><div><b>03</b><section><h3>Show up consistently</h3><p>Complete tasks, earn points, and review your progress.</p></section></div></div></div></section>
+      <section class="final-cta wrap"><div><div class="eyebrow">START SMALL. STAY CONSISTENT.</div><h2>Make today count.</h2><p>Your community is one good decision away.</p></div><button class="btn btn-primary btn-large" data-open="signup">Get started for free ↗</button></section>
+    </section>
+
+    <section id="appPage" class="page app-page">
+      <aside class="sidebar">
+        <a class="brand side-brand" href="#" data-page="dashboard"><span class="brand-mark">↗</span><span>consistify<small>Better, every day.</small></span></a>
+        <div class="group-switcher"><small>YOUR COMMUNITY</small><button id="groupSwitcher">Choose a group <span>⌄</span></button><div id="groupMenu" class="group-menu hidden"></div></div>
+        <div class="side-label">WORKSPACE</div>
+        <nav class="side-nav">
+          <button class="side-link active" data-view="dashboard"><span>⌂</span> Overview</button>
+          <button class="side-link" data-view="tasks"><span>☑</span> Tasks</button>
+          <button class="side-link" data-view="progress"><span>⌁</span> Progress</button>
+          <button class="side-link" data-view="calendar"><span>▦</span> Calendar</button>
+          <button class="side-link" data-view="leaderboard"><span>♜</span> Leaderboard</button>
+        </nav>
+        <div class="sidebar-bottom"><div class="sidebar-tip"><span>✦ A little reminder</span><p>Consistency beats intensity when you keep showing up.</p></div><button class="side-link" id="groupSettingsButton"><span>⚙</span> Group settings</button><button class="side-link" id="logoutButton"><span>↪</span> Log out</button></div>
+      </aside>
+      <div class="app-main">
+        <header class="app-header"><div><button id="mobileMenu" class="mobile-menu">☰</button><small id="currentDate"></small><h1 id="pageTitle">Overview</h1></div><div class="header-right"><span class="group-pill"><i></i><span id="headerGroupName">My Community</span></span><button class="user-chip" id="userMenuButton"><span class="user-avatar" id="userAvatar">Y</span><span id="headerUsername">You</span>⌄</button><div id="userMenu" class="user-menu hidden"><button id="profileButton">My profile</button><button id="headerLogout">Log out</button></div></div></header>
+        <div class="app-content">
+          <div id="dashboardView" class="view active">
+            <div class="welcome-row"><div><h2 id="welcomeHeading">Good to see you 👋</h2><p>Every small step adds up. Here's your community today.</p></div><button class="btn btn-primary" id="addTaskTop">＋ Add task</button></div>
+            <div class="stat-grid"><article class="stat-card"><div class="stat-top"><span>Your points today</span><span class="stat-symbol blue-symbol">✦</span></div><strong id="yourToday">0</strong><small id="yourTodaySub">Start with one task</small></article><article class="stat-card"><div class="stat-top"><span>Community points</span><span class="stat-symbol purple-symbol">♧</span></div><strong id="groupPoints">0</strong><small>Points earned today by everyone</small></article><article class="stat-card"><div class="stat-top"><span>Your streak</span><span class="stat-symbol orange-symbol">♨</span></div><strong id="yourStreak">0 <em>days</em></strong><small>Consecutive days with activity</small></article><article class="stat-card"><div class="stat-top"><span>Tasks completed</span><span class="stat-symbol green-symbol">✓</span></div><strong id="completedCount">0/0</strong><small>Today's group checklist</small></article></div>
+            <div class="dashboard-grid"><section class="panel chart-panel"><div class="panel-heading"><div><h3>Progress over time</h3><p>Compare daily effort and your running total.</p></div><select id="chartMode" class="select-small"><option value="daily">Daily points</option><option value="cumulative">Cumulative</option></select></div><div class="chart-wrap"><canvas id="progressChart" aria-label="Group progress graph"></canvas></div><div class="chart-key" id="chartKey"></div></section>
+              <section class="panel tasks-panel"><div class="panel-heading"><div><h3>Today's tasks</h3><p>One check at a time.</p></div><button class="text-button" data-view="tasks">View all ↗</button></div><div id="todayTasks" class="task-list"></div><button class="add-task-inline" id="addTaskInline">＋ Add a task</button></section>
+              <section class="panel activity-panel"><div class="panel-heading"><div><h3>Community activity</h3><p>Latest updates from your group.</p></div></div><div id="activityList" class="activity-list"></div></section>
+              <section class="panel leaderboard-panel"><div class="panel-heading"><div><h3>Community leaderboard</h3><p>All-time points, friendly competition.</p></div><button class="text-button" data-view="leaderboard">Full board ↗</button></div><div id="miniLeaderboard"></div></section>
+            </div>
+          </div>
+          <div id="tasksView" class="view"><div class="page-intro"><div><h2>Tasks that move you forward.</h2><p>Complete your work and build your record, one day at a time.</p></div><button class="btn btn-primary" id="addTaskPage">＋ Add task</button></div><div class="filter-row"><button class="filter-chip active" data-filter="all">All tasks</button><button class="filter-chip" data-filter="active">To do</button><button class="filter-chip" data-filter="done">Completed today</button></div><div id="allTasks" class="task-grid"></div></div>
+          <div id="progressView" class="view"><div class="page-intro"><div><h2>Your consistency, made visible.</h2><p>Understand your daily effort and long-term momentum.</p></div></div><div class="stat-grid progress-stats"><article class="stat-card"><span>Total group points</span><strong id="allTimePoints">0</strong><small>Across all recorded days</small></article><article class="stat-card"><span>Group tasks done</span><strong id="allTimeTasks">0</strong><small>Completions recorded</small></article><article class="stat-card"><span>Active members</span><strong id="memberCount">0</strong><small>In this community</small></article></div><section class="panel big-chart-panel"><div class="panel-heading"><div><h3>Daily points</h3><p>Points earned by each member each day.</p></div></div><div class="chart-wrap tall"><canvas id="dailyChart"></canvas></div><div id="dailyKey" class="chart-key"></div></section><section class="panel big-chart-panel"><div class="panel-heading"><div><h3>Cumulative points</h3><p>Running total across recorded days.</p></div></div><div class="chart-wrap tall"><canvas id="cumulativeChart"></canvas></div><div id="cumulativeKey" class="chart-key"></div></section></div>
+          <div id="calendarView" class="view"><div class="page-intro"><div><h2>Consistency calendar</h2><p>Look back at the days you showed up.</p></div><div class="month-control"><button id="prevMonth">‹</button><strong id="calendarMonth"></strong><button id="nextMonth">›</button></div></div><section class="panel calendar-panel"><div class="calendar-weekdays"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div id="calendarGrid" class="calendar-grid"></div><p class="calendar-note"><i></i> Day with completed tasks</p></section></div>
+          <div id="leaderboardView" class="view"><div class="page-intro"><div><h2>A little friendly competition.</h2><p>Celebrate effort, not just the final score.</p></div></div><section class="panel leaderboard-full"><div class="panel-heading"><div><h3>All-time leaderboard</h3><p>Members ranked by points earned.</p></div></div><div id="fullLeaderboard"></div></section></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="siteFooter"><div class="wrap footer-inner"><a class="brand" href="#"><span class="brand-mark">↗</span><span>consistify<small>Better, every day.</small></span></a><span>Built for the progress you make every day.</span><span>© 2026 Consistify</span></div></footer>
+
+  <div id="authModal" class="modal-backdrop hidden"><div class="modal auth-modal"><button class="modal-close" data-close aria-label="Close">×</button><div class="modal-brand"><span class="brand-mark">↗</span></div><div id="authContent"></div></div></div>
+  <div id="taskModal" class="modal-backdrop hidden"><div class="modal"><button class="modal-close" data-close aria-label="Close">×</button><div class="modal-heading"><span class="eyebrow">MAKE IT HAPPEN</span><h2 id="taskModalTitle">Add a task</h2><p>Choose something you want to show up for.</p></div><form id="taskForm"><label for="taskName">Task name</label><input id="taskName" maxlength="80" placeholder="e.g. Revise Physics chapter 3" required/><label for="taskCategory">Category</label><select id="taskCategory"><option>Study</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Maths</option><option>Reading</option><option>Coding</option><option>Fitness</option><option>Personal</option></select><label for="taskPoints">Points for completion</label><input id="taskPoints" type="number" min="1" max="100" value="10" required/><div class="form-actions"><button type="button" class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" type="submit">Save task</button></div></form></div></div>
+  <div id="settingsModal" class="modal-backdrop hidden"><div class="modal"><button class="modal-close" data-close>×</button><div class="modal-heading"><span class="eyebrow">YOUR COMMUNITY</span><h2>Group settings</h2><p>Manage your invite and community name.</p></div><form id="settingsForm"><label for="groupNameInput">Group name</label><input id="groupNameInput" maxlength="40" required/><label>Invite code</label><div class="invite-code-row"><code id="settingsInviteCode"></code><button type="button" id="copyCode" class="btn btn-outline">Copy code</button></div><p class="form-hint">Anyone with this code may be able to join in this demo. In the real backend, membership and invite security will be enforced by the server.</p><button class="btn btn-primary full-width" type="submit">Save settings</button></form></div></div>
+  <div id="toast" class="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
