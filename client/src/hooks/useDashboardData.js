@@ -13,6 +13,7 @@ export default function useDashboardData({
   chartRange,
   period,
   calDate,
+  userId,
 }) {
   const { toast } = useToast();
   const [summary, setSummary] = useState(null);
@@ -106,38 +107,72 @@ export default function useDashboardData({
   }, [groupId, view, chartMode, chartRange, period, toast]);
 
   const optimisticallyUpdateTask = useCallback((task, undo) => {
-    if (!checklist) return null;
-    const previousChecklist = checklist;
+    const previousState = {
+      checklist,
+      chartData,
+      dailyChart,
+      cumChart,
+    };
     const previousCount = task.completionCount ?? (task.completed ? 1 : 0);
     const nextCount = Math.max(0, previousCount + (undo ? -1 : 1));
     const nextCompleted = nextCount >= (task.dailyLimit || 1);
     const completionDelta = Number(nextCompleted) - Number(task.completed);
     const pointsDelta = (undo ? -1 : 1) * task.points;
+    const dateKey = checklist?.dateKey;
 
-    setChecklist({
-      ...previousChecklist,
-      pointsToday: Math.max(0, previousChecklist.pointsToday + pointsDelta),
-      completedCount: Math.max(0, previousChecklist.completedCount + completionDelta),
-      tasks: previousChecklist.tasks.map((item) =>
-        item.id === task.id
-          ? {
-              ...item,
-              completionCount: nextCount,
-              completed: nextCompleted,
-              pointsAwarded: Math.max(0, item.pointsAwarded + pointsDelta),
-              latestOccurrence: undo
-                ? (nextCount ? (item.latestOccurrence || 1) - 1 : null)
-                : (item.latestOccurrence || 0) + 1,
-            }
-          : item
-      ),
-    });
+    if (checklist) {
+      setChecklist({
+        ...checklist,
+        pointsToday: Math.max(0, checklist.pointsToday + pointsDelta),
+        completedCount: Math.max(0, checklist.completedCount + completionDelta),
+        tasks: checklist.tasks.map((item) =>
+          item.id === task.id
+            ? {
+                ...item,
+                completionCount: nextCount,
+                completed: nextCompleted,
+                pointsAwarded: Math.max(0, item.pointsAwarded + pointsDelta),
+                latestOccurrence: undo
+                  ? (nextCount ? (item.latestOccurrence || 1) - 1 : null)
+                  : (item.latestOccurrence || 0) + 1,
+              }
+            : item
+        ),
+      });
+    }
 
-    return previousChecklist;
-  }, [checklist]);
+    const updateSeries = (chart, mode) => {
+      const dateIndex = chart.dates.indexOf(dateKey);
+      if (!userId || dateIndex < 0) return chart;
+      return {
+        ...chart,
+        series: chart.series.map((series) => {
+          if (series.userId !== userId) return series;
+          const daily = [...(series.daily || series.values)];
+          daily[dateIndex] = Math.max(0, (daily[dateIndex] || 0) + pointsDelta);
+          const values = mode === 'cumulative'
+            ? series.values.map((value, index) =>
+                index >= dateIndex ? Math.max(0, value + pointsDelta) : value
+              )
+            : daily;
+          return { ...series, daily, values };
+        }),
+      };
+    };
 
-  const restoreChecklist = useCallback((previousChecklist) => {
-    if (previousChecklist) setChecklist(previousChecklist);
+    setChartData((current) => updateSeries(current, current.mode));
+    setDailyChart((current) => updateSeries(current, 'daily'));
+    setCumChart((current) => updateSeries(current, 'cumulative'));
+
+    return previousState;
+  }, [checklist, chartData, dailyChart, cumChart, userId]);
+
+  const restoreChecklist = useCallback((previousState) => {
+    if (!previousState) return;
+    if (previousState.checklist) setChecklist(previousState.checklist);
+    setChartData(previousState.chartData);
+    setDailyChart(previousState.dailyChart);
+    setCumChart(previousState.cumChart);
   }, []);
 
   useEffect(() => {

@@ -51,6 +51,7 @@ export default function AppDashboard() {
     chartRange,
     period,
     calDate,
+    userId: user?.id,
   });
 
   const toggleTask = async (task, action) => {

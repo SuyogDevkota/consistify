@@ -9,6 +9,13 @@ import {
   Legend,
 } from 'recharts';
 
+const LINE_STYLES = [
+  { dash: undefined, legend: 'solid' },
+  { dash: '7 4', legend: 'dashed' },
+  { dash: '2 4', legend: 'dotted' },
+  { dash: '9 3 2 3', legend: 'dashed' },
+];
+
 function buildChartData(dates = [], series = []) {
   return dates.map((date, i) => {
     const row = { date: date.slice(5), fullDate: date };
@@ -44,7 +51,7 @@ export default function PointsChart({ dates, series, height = 210, emptyLabel = 
             labelFormatter={(_, payload) => payload?.[0]?.payload?.fullDate || ''}
           />
           {!many ? <Legend wrapperStyle={{ fontSize: 11 }} /> : null}
-          {series.map((s) => (
+          {series.map((s, index) => (
             <Line
               key={s.userId}
               type="monotone"
@@ -52,6 +59,7 @@ export default function PointsChart({ dates, series, height = 210, emptyLabel = 
               name={s.name}
               stroke={s.color}
               strokeWidth={2.4}
+              strokeDasharray={LINE_STYLES[index % LINE_STYLES.length].dash}
               dot={{ r: 3 }}
               activeDot={{ r: 5 }}
             />
@@ -66,9 +74,13 @@ export function ChartLegend({ series }) {
   if (!series?.length) return null;
   return (
     <div className="chart-key">
-      {series.map((s) => (
+      {series.map((s, index) => (
         <span key={s.userId}>
-          <i style={{ background: s.color }} />
+          <i
+            style={{
+              borderTop: `2px ${LINE_STYLES[index % LINE_STYLES.length].legend} ${s.color}`,
+            }}
+          />
           {s.name}
         </span>
       ))}
