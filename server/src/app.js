@@ -1,4 +1,6 @@
 import express from 'express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -9,6 +11,11 @@ import { doubleCsrf } from 'csrf-csrf';
 import { env } from './config/env.js';
 import apiRoutes from './routes/index.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+
+const clientDistPath = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '../../client/dist'
+);
 
 export function createApp() {
   const app = express();
@@ -75,6 +82,16 @@ export function createApp() {
   });
 
   app.use('/api/v1', apiRoutes);
+
+  if (env.isProd) {
+    app.use(express.static(clientDistPath));
+    app.get('*', (req, res, next) => {
+      if (req.path === '/api' || req.path.startsWith('/api/')) return next();
+      res.sendFile(path.join(clientDistPath, 'index.html'), (err) => {
+        if (err) next(err);
+      });
+    });
+  }
 
   app.use(notFoundHandler);
   app.use(errorHandler);

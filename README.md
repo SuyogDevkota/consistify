@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Consistify
 
 Private group-based consistency tracker built with the **MERN** stack (MongoDB, Express, React, Node).
@@ -90,11 +89,41 @@ Runs **server integration tests** (`mongodb-memory-server`, never your real data
 
 ## Deployment notes
 
-1. **MongoDB Atlas** — create a cluster; set `MONGODB_URI`.  
-2. **API host** (Render, Railway, Fly, etc.) — set production env; enable HTTPS.  
-3. **Frontend** (Vercel/Netlify/static host) — build with `npm run build`, set `VITE_API_URL` to the API URL.  
-4. **Cookies across origins** — use `COOKIE_SECURE=true`, `COOKIE_SAME_SITE=none`, and exact `CLIENT_URL`. Prefer same-site reverse-proxy when possible.  
-5. **CSRF** — browser clients must call `GET /api/v1/csrf` and send `x-csrf-token` on mutating authenticated requests (the React client already does this).
+The app can run as one Render Web Service from the repository root. The build installs
+the root, server, and client dependencies, then builds the React app; Express serves
+the generated `client/dist` files in production.
+
+**Render Web Service settings**
+
+- Root Directory: leave blank (repository root)
+- Build Command:
+  ```bash
+  npm install && npm install --prefix server && npm install --prefix client && npm run build --prefix client
+  ```
+- Start Command:
+  ```bash
+  npm start --prefix server
+  ```
+
+Set these environment variables in Render:
+
+- `NODE_ENV=production`
+- `MONGODB_URI` — MongoDB Atlas connection string
+- `CLIENT_URL` — the exact public URL of this Render service (for example, `https://consistify.onrender.com`)
+- `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, and `CSRF_SECRET` — separate, long random secrets
+- `COOKIE_SECURE=true`
+- `COOKIE_SAME_SITE=lax`
+
+The frontend defaults to the same-origin API path `/api/v1`, so no `VITE_API_URL`
+is needed for this single-service deployment. Use Node.js 20.19+ or 22.12+ for Vite 8.
+Render provides the listening `PORT`.
+
+For separate frontend and backend hosts, configure `CLIENT_URL` to the frontend origin,
+set `VITE_API_URL` to the backend URL ending in `/api/v1`, and review the cross-site
+cookie settings (`COOKIE_SECURE=true`, `COOKIE_SAME_SITE=none`).
+
+CSRF-protected browser requests obtain a token from `GET /api/v1/csrf` and send it as
+`x-csrf-token` on authenticated mutations (the React client handles this).
 
 ### Point / streak policy (summary)
 
@@ -116,7 +145,3 @@ The React app reuses that CSS language; interactions are React state/hooks, not 
 - In-app push/email **notifications** are not a full product; the group activity feed covers events.
 - Completions are allowed for **today and yesterday** in the group timezone only (no arbitrary historical backfill).
 - Existing databases must run the task-completion index migration before deploying the multi-completion update: `npm run migrate:completion-occurrences --prefix server`.
-=======
-# consistify
-A consistency traker website made for groups 
->>>>>>> 4788739ee1499b7393337b2f4bd3974d03b8f720
