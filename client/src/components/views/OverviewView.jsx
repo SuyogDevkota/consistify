@@ -21,6 +21,7 @@ export default function OverviewView({
   canManageTasks,
   onAddTask,
   onToggleTask,
+  busyTaskId,
   onOpenTasks,
   onOpenLeaderboard,
   onInvite,
@@ -138,6 +139,7 @@ export default function OverviewView({
             tasks={checklist?.tasks || []}
             limit={5}
             onToggle={onToggleTask}
+            busyTaskId={busyTaskId}
             emptyMessage="No tasks yet. Add your first one."
           />
           {canManageTasks ? (

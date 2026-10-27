@@ -105,6 +105,41 @@ export default function useDashboardData({
     }
   }, [groupId, view, chartMode, chartRange, period, toast]);
 
+  const optimisticallyUpdateTask = useCallback((task, undo) => {
+    if (!checklist) return null;
+    const previousChecklist = checklist;
+    const previousCount = task.completionCount ?? (task.completed ? 1 : 0);
+    const nextCount = Math.max(0, previousCount + (undo ? -1 : 1));
+    const nextCompleted = nextCount >= (task.dailyLimit || 1);
+    const completionDelta = Number(nextCompleted) - Number(task.completed);
+    const pointsDelta = (undo ? -1 : 1) * task.points;
+
+    setChecklist({
+      ...previousChecklist,
+      pointsToday: Math.max(0, previousChecklist.pointsToday + pointsDelta),
+      completedCount: Math.max(0, previousChecklist.completedCount + completionDelta),
+      tasks: previousChecklist.tasks.map((item) =>
+        item.id === task.id
+          ? {
+              ...item,
+              completionCount: nextCount,
+              completed: nextCompleted,
+              pointsAwarded: Math.max(0, item.pointsAwarded + pointsDelta),
+              latestOccurrence: undo
+                ? (nextCount ? (item.latestOccurrence || 1) - 1 : null)
+                : (item.latestOccurrence || 0) + 1,
+            }
+          : item
+      ),
+    });
+
+    return previousChecklist;
+  }, [checklist]);
+
+  const restoreChecklist = useCallback((previousChecklist) => {
+    if (previousChecklist) setChecklist(previousChecklist);
+  }, []);
+
   useEffect(() => {
     refresh();
   }, [refresh]);
@@ -126,5 +161,7 @@ export default function useDashboardData({
     error,
     refresh,
     refreshAfterTask,
+    optimisticallyUpdateTask,
+    restoreChecklist,
   };
 }

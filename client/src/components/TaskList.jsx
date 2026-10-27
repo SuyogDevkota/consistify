@@ -11,6 +11,7 @@ export default function TaskList({
   emptyTitle,
   emptyMessage = 'No tasks yet.',
   limit,
+  busyTaskId,
 }) {
   const list = typeof limit === 'number' ? tasks.slice(0, limit) : tasks;
 
@@ -26,7 +27,7 @@ export default function TaskList({
     return (
       <div className="task-list">
         {list.map((t) => (
-          <TaskItem key={t.id} task={t} onToggle={onToggle} compact />
+          <TaskItem key={t.id} task={t} onToggle={onToggle} compact busy={busyTaskId === t.id} />
         ))}
       </div>
     );
@@ -40,6 +41,7 @@ export default function TaskList({
           task={t}
           compact={false}
           onToggle={onToggle}
+          busy={busyTaskId === t.id}
           canDelete={canDelete}
           onDelete={onDelete}
           onEdit={onEdit}

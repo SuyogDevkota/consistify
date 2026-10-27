@@ -19,6 +19,7 @@ export default function TasksView({
   onAddTask,
   onEditTask,
   onToggle,
+  busyTaskId,
   onDelete,
   onCategoriesChanged,
   groupId,
@@ -171,6 +172,7 @@ export default function TasksView({
         tasks={filtered}
         compact={false}
         onToggle={onToggle}
+        busyTaskId={busyTaskId}
         canDelete={canManageTasks}
         onDelete={onDelete}
         onEdit={canManageTasks ? onEditTask : undefined}

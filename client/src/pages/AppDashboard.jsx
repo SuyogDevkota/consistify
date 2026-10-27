@@ -56,21 +56,26 @@ export default function AppDashboard() {
   const toggleTask = async (task, action) => {
     if (!activeGroupId || busyTask) return;
     setBusyTask(task.id);
+    const completedCount = task.completionCount ?? (task.completed ? 1 : 0);
+    const limit = task.dailyLimit || 1;
+    const shouldUndo = action === 'undo' || (!action && task.completed);
+    if (!shouldUndo && completedCount >= limit) {
+      setBusyTask(null);
+      return;
+    }
+    const previousChecklist = data.optimisticallyUpdateTask(task, shouldUndo);
     try {
-      const completedCount = task.completionCount ?? (task.completed ? 1 : 0);
-      const limit = task.dailyLimit || 1;
-      const shouldUndo = action === 'undo' || (!action && task.completed);
       if (shouldUndo) {
         await groupsApi.undo(activeGroupId, task.id, {
           ...(task.latestOccurrence ? { occurrence: task.latestOccurrence } : {}),
         });
       } else {
-        if (completedCount >= limit) return;
         await groupsApi.complete(activeGroupId, task.id);
       }
       toast(shouldUndo ? 'Completion removed.' : 'Nice work! Task completed.');
-      await data.refreshAfterTask();
+      data.refreshAfterTask();
     } catch (err) {
+      data.restoreChecklist(previousChecklist);
       toast(getErrorMessage(err));
     } finally {
       setBusyTask(null);
@@ -184,6 +189,7 @@ export default function AppDashboard() {
             setTaskModal(true);
           }}
           onToggleTask={toggleTask}
+          busyTaskId={busyTask}
           onOpenTasks={() => setView('tasks')}
           onOpenLeaderboard={() => setView('leaderboard')}
           onInvite={() => setInviteModal(true)}
@@ -205,6 +211,7 @@ export default function AppDashboard() {
             setTaskModal(true);
           }}
           onToggle={toggleTask}
+          busyTaskId={busyTask}
           onDelete={archiveTask}
           categories={data.categories}
           groupId={activeGroupId}

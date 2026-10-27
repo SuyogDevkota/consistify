@@ -1,4 +1,12 @@
-export default function TaskItem({ task, onToggle, compact = true, onDelete, canDelete, onEdit }) {
+export default function TaskItem({
+  task,
+  onToggle,
+  compact = true,
+  onDelete,
+  canDelete,
+  onEdit,
+  busy = false,
+}) {
   const count = task.completionCount ?? (task.completed ? 1 : 0);
   const limit = task.dailyLimit || 1;
   const done = task.completed || count >= limit;
@@ -12,7 +20,7 @@ export default function TaskItem({ task, onToggle, compact = true, onDelete, can
               type="button"
               className="task-check"
               onClick={() => onToggle?.(task, 'complete')}
-              disabled={count >= limit}
+              disabled={busy || count >= limit}
               aria-label={`Add completion (${count} of ${limit})`}
             >
               +
@@ -22,6 +30,7 @@ export default function TaskItem({ task, onToggle, compact = true, onDelete, can
                 type="button"
                 className="task-undo"
                 onClick={() => onToggle?.(task, 'undo')}
+                disabled={busy}
                 aria-label="Undo latest completion"
               >
                 −
@@ -33,6 +42,7 @@ export default function TaskItem({ task, onToggle, compact = true, onDelete, can
             type="button"
             className={`task-check ${done ? 'checked' : ''}`}
             onClick={() => onToggle?.(task)}
+            disabled={busy}
             aria-label={done ? 'Mark incomplete' : 'Mark complete'}
           >
             {done ? '✓' : ''}
@@ -58,7 +68,7 @@ export default function TaskItem({ task, onToggle, compact = true, onDelete, can
             type="button"
             className="task-check"
             onClick={() => onToggle?.(task, 'complete')}
-            disabled={count >= limit}
+            disabled={busy || count >= limit}
             aria-label={`Add completion (${count} of ${limit})`}
           >
             +
@@ -68,6 +78,7 @@ export default function TaskItem({ task, onToggle, compact = true, onDelete, can
               type="button"
               className="task-undo"
               onClick={() => onToggle?.(task, 'undo')}
+              disabled={busy}
               aria-label="Undo latest completion"
             >
               −
@@ -79,6 +90,7 @@ export default function TaskItem({ task, onToggle, compact = true, onDelete, can
           type="button"
           className={`task-check ${done ? 'checked' : ''}`}
           onClick={() => onToggle?.(task)}
+          disabled={busy}
           aria-label={done ? 'Mark incomplete' : 'Mark complete'}
         >
           {done ? '✓' : ''}
