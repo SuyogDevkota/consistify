@@ -69,7 +69,7 @@ export default function AppDashboard() {
         await groupsApi.complete(activeGroupId, task.id);
       }
       toast(shouldUndo ? 'Completion removed.' : 'Nice work! Task completed.');
-      await data.refresh();
+      await data.refreshAfterTask();
     } catch (err) {
       toast(getErrorMessage(err));
     } finally {

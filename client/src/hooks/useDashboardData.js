@@ -78,6 +78,33 @@ export default function useDashboardData({
     }
   }, [groupId, chartMode, chartRange, period, view, calDate, toast]);
 
+  const refreshAfterTask = useCallback(async () => {
+    if (!groupId) return;
+    try {
+      if (view === 'dashboard') {
+        const chartFn = chartMode === 'daily' ? groupsApi.daily : groupsApi.cumulative;
+        const [check, sum, act, board, chart] = await Promise.all([
+          groupsApi.checklist(groupId),
+          groupsApi.summary(groupId),
+          groupsApi.activity(groupId, 8),
+          groupsApi.leaderboard(groupId, period),
+          chartFn(groupId, chartRange),
+        ]);
+        setChecklist(check.data.data);
+        setSummary(sum.data.data);
+        setActivity(act.data.data.activity);
+        setLeaderboard(board.data.data.leaderboard);
+        setChartData(chart.data.data);
+        return;
+      }
+
+      const check = await groupsApi.checklist(groupId);
+      setChecklist(check.data.data);
+    } catch (err) {
+      toast(getErrorMessage(err));
+    }
+  }, [groupId, view, chartMode, chartRange, period, toast]);
+
   useEffect(() => {
     refresh();
   }, [refresh]);
@@ -98,5 +125,6 @@ export default function useDashboardData({
     loading,
     error,
     refresh,
+    refreshAfterTask,
   };
 }
