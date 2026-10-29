@@ -7,3 +7,6 @@ export { Category } from './Category.js';
 export { Task } from './Task.js';
 export { TaskCompletion } from './TaskCompletion.js';
 export { ActivityLog } from './ActivityLog.js';
+export { Notification } from './Notification.js';
+export { PushSubscription } from './PushSubscription.js';
+export { ChatMessage } from './ChatMessage.js';

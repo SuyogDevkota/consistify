@@ -71,6 +71,8 @@ See `server/.env.example`:
 - `COOKIE_SECURE=true` in production (HTTPS)  
 - `COOKIE_SAME_SITE` — `lax` (same-site) or `none` (cross-site + Secure)  
 - `CSRF_SECRET` — CSRF signing secret  
+- `PUSH_VAPID_PUBLIC_KEY`, `PUSH_VAPID_PRIVATE_KEY`, `PUSH_VAPID_SUBJECT` — optional Web Push configuration; set all three to enable browser notifications. Generate keys with `web-push generate-vapid-keys` and use a contact such as `mailto:admin@example.com` for the subject.
+- `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — optional media storage for community chat images and voice notes. Set all three to enable uploads; keep the API secret private. Text chat works without these values.
 
 ### Client (`client/.env`)
 
@@ -90,7 +92,7 @@ Runs **server integration tests** (`mongodb-memory-server`, never your real data
 ## Deployment notes
 
 The app can run as one Render Web Service from the repository root. The build installs
-the root, server, and client dependencies, then builds the React app; Express serves
+the server and client dependencies, then builds the React app; Express serves
 the generated `client/dist` files in production.
 
 **Render Web Service settings**
@@ -98,7 +100,7 @@ the generated `client/dist` files in production.
 - Root Directory: leave blank (repository root)
 - Build Command:
   ```bash
-  npm install && npm install --prefix server && npm install --prefix client && npm run build --prefix client
+  npm install --prefix server && npm install --include=dev --prefix client && npm run build --prefix client
   ```
 - Start Command:
   ```bash
@@ -113,6 +115,8 @@ Set these environment variables in Render:
 - `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, and `CSRF_SECRET` — separate, long random secrets
 - `COOKIE_SECURE=true`
 - `COOKIE_SAME_SITE=lax`
+- Optional browser push: `PUSH_VAPID_PUBLIC_KEY`, `PUSH_VAPID_PRIVATE_KEY`, `PUSH_VAPID_SUBJECT`. Generate a matching key pair by running `npx web-push generate-vapid-keys` from the `server` directory. Keep the private key only in Render's environment settings; use a contact such as `mailto:admin@example.com` for the subject.
+- Optional chat media: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`. Find these in the Cloudinary console dashboard. Keep the API secret only in Render's environment settings; text chat remains available if media storage is not configured.
 
 The frontend defaults to the same-origin API path `/api/v1`, so no `VITE_API_URL`
 is needed for this single-service deployment. Use Node.js 20.19+ or 22.12+ for Vite 8.
@@ -130,6 +134,7 @@ CSRF-protected browser requests obtain a token from `GET /api/v1/csrf` and send 
 - Completions allowed for **today** or **yesterday** (grace) in the **group timezone**.  
 - Points snapshotted on the completion record (editing a task later does not rewrite history).  
 - Undo marks `undoneAt`; points no longer count; activity is logged.  
+- Members can opt in to in-app notifications for community activity and browser push notifications when a member completes a task, creates or changes a task, updates the group, or performs another activity.
 - Tasks can allow 1–50 completions per member per scheduled day; each award has its own audit record and can be undone independently.  
 - Streaks: consecutive days with ≥1 valid completion; if today is empty, current streak may start from yesterday.
 
@@ -142,6 +147,8 @@ The React app reuses that CSS language; interactions are React state/hooks, not 
 
 - You need a MongoDB URI (local or Atlas) in `server/.env` to run the live app. Tests use an in-memory server and do not need that URI.
 - MongoDB **transactions** are not required for the default standalone setup. Concurrent completion safety uses unique indexes. For multi-document transactions in production, run a replica set.
-- In-app push/email **notifications** are not a full product; the group activity feed covers events.
+- Email notifications and scheduled reminders are not included. In-app and browser notifications are opt-in per group; browser push also requires user permission and the optional VAPID environment variables.
+- Browser push uses the existing Render service and requires no additional service or changes to its build/start commands.
+- Community chat stores messages in MongoDB and sends authenticated image/voice uploads to Cloudinary when configured. Media is served through a group-member-checked API route rather than a public Cloudinary URL. Live updates use the existing server; the current single-process Render deployment needs no additional service.
 - Completions are allowed for **today and yesterday** in the group timezone only (no arbitrary historical backfill).
 - Existing databases must run the task-completion index migration before deploying the multi-completion update: `npm run migrate:completion-occurrences --prefix server`.

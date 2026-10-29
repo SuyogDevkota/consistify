@@ -12,6 +12,8 @@ const membershipSchema = new mongoose.Schema(
       required: true,
     },
     displayName: { type: String, trim: true, maxlength: 80 },
+    notifyTaskCompletions: { type: Boolean, default: false },
+    browserPushEnabled: { type: Boolean, default: false },
     status: {
       type: String,
       enum: ['active', 'pending', 'left', 'removed'],

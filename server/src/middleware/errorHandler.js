@@ -5,13 +5,23 @@ export function notFoundHandler(req, res, next) {
   next(new AppError(`Route not found: ${req.method} ${req.originalUrl}`, 404, 'NOT_FOUND'));
 }
 
-export function errorHandler(err, req, res, _next) {
+export function errorHandler(err, req, res, next) {
+  if (res.headersSent) return next(err);
+
   let status = err.statusCode || 500;
   let code = err.code || 'INTERNAL_ERROR';
   let message = err.message || 'Internal server error';
   let details = err.details || null;
 
-  if (err.name === 'ValidationError') {
+  if (err.name === 'MulterError' && err.code === 'LIMIT_FILE_SIZE') {
+    status = 413;
+    code = 'CHAT_FILE_TOO_LARGE';
+    message = 'Images and voice notes must be 10 MB or smaller';
+  } else if (err.name === 'MulterError') {
+    status = 400;
+    code = 'INVALID_CHAT_FILE';
+    message = 'Only one supported image or voice note may be uploaded';
+  } else if (err.name === 'ValidationError') {
     status = 400;
     code = 'VALIDATION_ERROR';
     message = 'Validation failed';

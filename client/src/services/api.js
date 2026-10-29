@@ -117,6 +117,29 @@ export const authApi = {
   deleteAccount: (data) => api.delete('/auth/account', { data }),
 };
 
+export const notificationsApi = {
+  list: (groupId) => api.get(`/notifications/${groupId}`),
+  updatePreferences: (groupId, data) => api.put(`/notifications/${groupId}/preferences`, data),
+  subscribe: (groupId, data) => api.post(`/notifications/${groupId}/subscriptions`, data),
+  unsubscribe: (groupId, endpoint) =>
+    api.delete(`/notifications/${groupId}/subscriptions`, { data: { endpoint } }),
+  markRead: (groupId, notificationId) =>
+    api.post(`/notifications/${groupId}/${notificationId}/read`),
+  markAllRead: (groupId) => api.post(`/notifications/${groupId}/read-all`),
+};
+
+export const chatApi = {
+  list: (groupId) => api.get(`/chat/${groupId}/messages`),
+  send: (groupId, data) =>
+    api.post(`/chat/${groupId}/messages`, data, {
+      ...(data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}),
+    }),
+  mediaUrl: (groupId, messageId) =>
+    new URL(`${API_URL}/chat/${groupId}/messages/${messageId}/media`, window.location.href).toString(),
+  streamUrl: (groupId) =>
+    new URL(`${API_URL}/chat/${groupId}/events`, window.location.href).toString(),
+};
+
 export const groupsApi = {
   list: () => api.get('/groups'),
   create: (data) => api.post('/groups', data),

@@ -5,6 +5,7 @@ import CreateGroupModal from '../components/CreateGroupModal';
 import JoinGroupModal from '../components/JoinGroupModal';
 import SettingsModal from '../components/SettingsModal';
 import ProfileModal from '../components/ProfileModal';
+import NotificationCenter from '../components/NotificationCenter';
 import { useAuth } from '../context/AuthContext';
 import { useGroup } from '../context/GroupContext';
 import { useToast } from '../hooks/useToast';
@@ -184,6 +185,7 @@ export default function DashboardLayout() {
               <i />
               <span>{groupDetails?.name || 'My Community'}</span>
             </span>
+            {activeGroupId ? <NotificationCenter groupId={activeGroupId} /> : null}
             <button
               type="button"
               className="user-chip"

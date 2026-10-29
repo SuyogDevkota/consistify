@@ -1,13 +1,25 @@
 import { ActivityLog } from '../models/ActivityLog.js';
+import { notifyActivity } from './notificationService.js';
+import { logger } from '../utils/logger.js';
 
 export async function logActivity({ groupId, actorId, type, message, meta = {} }) {
-  return ActivityLog.create({
+  const activity = await ActivityLog.create({
     group: groupId,
     actor: actorId || null,
     type,
     message,
     meta,
   });
+  try {
+    await notifyActivity(activity);
+  } catch (error) {
+    logger.error('Failed to create activity notifications', {
+      groupId: groupId.toString(),
+      type,
+      error: error.message,
+    });
+  }
+  return activity;
 }
 
 export async function getRecentActivity(groupId, { limit = 20 } = {}) {

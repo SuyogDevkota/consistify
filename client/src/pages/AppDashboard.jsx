@@ -175,6 +175,7 @@ export default function AppDashboard() {
       {view === 'dashboard' && (
         <OverviewView
           user={user}
+          groupId={activeGroupId}
           summary={data.summary}
           checklist={data.checklist}
           activity={data.activity}

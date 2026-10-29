@@ -5,6 +5,26 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
+const pushVapidPublicKey = process.env.PUSH_VAPID_PUBLIC_KEY || '';
+const pushVapidPrivateKey = process.env.PUSH_VAPID_PRIVATE_KEY || '';
+const pushVapidSubject = process.env.PUSH_VAPID_SUBJECT || '';
+const pushVapidValues = [pushVapidPublicKey, pushVapidPrivateKey, pushVapidSubject];
+const cloudinaryCloudName = process.env.CLOUDINARY_CLOUD_NAME || '';
+const cloudinaryApiKey = process.env.CLOUDINARY_API_KEY || '';
+const cloudinaryApiSecret = process.env.CLOUDINARY_API_SECRET || '';
+const cloudinaryValues = [cloudinaryCloudName, cloudinaryApiKey, cloudinaryApiSecret];
+
+if (pushVapidValues.some(Boolean) && pushVapidValues.some((value) => !value)) {
+  throw new Error(
+    'PUSH_VAPID_PUBLIC_KEY, PUSH_VAPID_PRIVATE_KEY, and PUSH_VAPID_SUBJECT must be set together'
+  );
+}
+if (cloudinaryValues.some(Boolean) && cloudinaryValues.some((value) => !value)) {
+  throw new Error(
+    'CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET must be set together'
+  );
+}
+
 function required(name, fallback) {
   const value = process.env[name] ?? fallback;
   if (value === undefined || value === '') {
@@ -29,4 +49,12 @@ export const env = {
   rateLimitWindowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 900000),
   rateLimitMax: Number(process.env.RATE_LIMIT_MAX || 100),
   authRateLimitMax: Number(process.env.AUTH_RATE_LIMIT_MAX || 20),
+  pushVapidPublicKey,
+  pushVapidPrivateKey,
+  pushVapidSubject,
+  pushConfigured: pushVapidValues.every(Boolean),
+  cloudinaryCloudName,
+  cloudinaryApiKey,
+  cloudinaryApiSecret,
+  mediaConfigured: cloudinaryValues.every(Boolean),
 };

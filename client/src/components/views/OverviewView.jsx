@@ -6,9 +6,11 @@ import PointsChart, { ChartLegend } from '../PointsChart';
 import Skeleton from '../Skeleton';
 import { firstName } from '../../utils/format';
 import { CHART_RANGES } from '../../utils/constants';
+import CommunityChat from '../CommunityChat';
 
 export default function OverviewView({
   user,
+  groupId,
   summary,
   checklist,
   activity,
@@ -170,6 +172,7 @@ export default function OverviewView({
           <Leaderboard rows={leaderboard.slice(0, 5)} currentUserId={user.id} />
         </section>
       </div>
+      <CommunityChat key={groupId} groupId={groupId} />
     </div>
   );
 }
