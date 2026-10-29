@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { MessageCircle } from 'lucide-react';
 import Brand from '../components/Brand';
 import CreateGroupModal from '../components/CreateGroupModal';
 import JoinGroupModal from '../components/JoinGroupModal';
@@ -145,7 +146,12 @@ export default function DashboardLayout() {
                 setSidebarOpen(false);
               }}
             >
-              <span>{item.icon}</span> {item.label}
+              <span>
+                {item.icon === 'chat' ? (
+                  <MessageCircle className="side-chat-icon" size={17} aria-hidden="true" />
+                ) : item.icon}
+              </span>{' '}
+              {item.label}
             </button>
           ))}
         </nav>

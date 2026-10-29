@@ -61,13 +61,26 @@ async function broadcastMessage(groupId, message) {
   if (!streams.size) groupStreams.delete(groupId.toString());
 }
 
-export async function listMessages(groupId) {
-  const messages = await ChatMessage.find({ group: groupId })
+export async function listMessages(groupId, before) {
+  const filter = { group: groupId };
+  if (before) {
+    const cursor = await ChatMessage.findOne({ _id: before, group: groupId })
+      .select('_id createdAt')
+      .lean();
+    if (!cursor) throw new AppError('Chat history cursor not found', 404, 'NOT_FOUND');
+    filter.$or = [
+      { createdAt: { $lt: cursor.createdAt } },
+      { createdAt: cursor.createdAt, _id: { $lt: cursor._id } },
+    ];
+  }
+  const records = await ChatMessage.find(filter)
     .sort({ createdAt: -1, _id: -1 })
-    .limit(50)
+    .limit(51)
     .populate('sender', 'name avatarColor')
     .lean();
-  return messages.reverse().map(serializeMessage);
+  const hasMore = records.length > 50;
+  const messages = records.slice(0, 50).reverse().map(serializeMessage);
+  return { messages, hasMore };
 }
 
 export async function createMessage({ groupId, userId, text, file }) {

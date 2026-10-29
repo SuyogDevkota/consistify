@@ -8,7 +8,7 @@ function mergeMessages(current, incoming) {
   incoming.forEach((message) => messages.set(message.id, message));
   return [...messages.values()].sort(
     (first, second) => new Date(first.createdAt) - new Date(second.createdAt)
-  ).slice(-100);
+  );
 }
 
 function formatMessageTime(value) {
@@ -23,10 +23,12 @@ function formatMessageTime(value) {
 export default function CommunityChat({ groupId }) {
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
+  const [hasMore, setHasMore] = useState(false);
   const [text, setText] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [mediaConfigured, setMediaConfigured] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingOlder, setLoadingOlder] = useState(false);
   const [sending, setSending] = useState(false);
   const [recording, setRecording] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -48,6 +50,7 @@ export default function CommunityChat({ groupId }) {
         if (!active) return;
         const data = response.data.data;
         setMessages((current) => mergeMessages(current, data.messages));
+        setHasMore(data.hasMore);
         setMediaConfigured(data.mediaConfigured);
         setError('');
       });
@@ -132,6 +135,28 @@ export default function CommunityChat({ groupId }) {
     stayAtBottomRef.current =
       element.scrollHeight - element.scrollTop - element.clientHeight < 100;
   }, []);
+
+  const loadOlderMessages = async () => {
+    if (!hasMore || loadingOlder || !messages.length) return;
+    const element = messagesRef.current;
+    const previousHeight = element?.scrollHeight || 0;
+    stayAtBottomRef.current = false;
+    setLoadingOlder(true);
+    setError('');
+    try {
+      const response = await chatApi.list(groupId, messages[0].id);
+      const data = response.data.data;
+      setMessages((current) => mergeMessages(current, data.messages));
+      setHasMore(data.hasMore);
+      requestAnimationFrame(() => {
+        if (element) element.scrollTop += element.scrollHeight - previousHeight;
+      });
+    } catch (requestError) {
+      setError(getErrorMessage(requestError));
+    } finally {
+      setLoadingOlder(false);
+    }
+  };
 
   const sendMessage = async (event) => {
     event.preventDefault();
@@ -220,6 +245,16 @@ export default function CommunityChat({ groupId }) {
         aria-live="polite"
         aria-busy={loading}
       >
+        {hasMore ? (
+          <button
+            type="button"
+            className="chat-history-button"
+            onClick={loadOlderMessages}
+            disabled={loadingOlder}
+          >
+            {loadingOlder ? 'Loading earlier messages…' : 'Load earlier messages'}
+          </button>
+        ) : null}
         {loading ? <p className="chat-empty">Loading messages…</p> : null}
         {!loading && messages.length === 0 ? (
           <p className="chat-empty">No messages yet. Start the conversation!</p>

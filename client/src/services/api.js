@@ -129,7 +129,8 @@ export const notificationsApi = {
 };
 
 export const chatApi = {
-  list: (groupId) => api.get(`/chat/${groupId}/messages`),
+  list: (groupId, before) =>
+    api.get(`/chat/${groupId}/messages`, { params: before ? { before } : {} }),
   send: (groupId, data) =>
     api.post(`/chat/${groupId}/messages`, data, {
       ...(data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}),

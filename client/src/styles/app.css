@@ -209,7 +209,31 @@ button.calendar-day.selected-day {
 }
 
 .community-chat {
-  margin-top: 20px;
+  margin-top: 0;
+}
+
+.community-page-intro {
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.community-page-icon {
+  display: grid;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid #3b5180;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #1d3155, #17233c);
+  color: #a9c1ff;
+  box-shadow: inset 0 1px #ffffff12;
+}
+
+.side-chat-icon {
+  display: block;
+  margin: auto;
 }
 
 .community-chat-heading {
@@ -256,6 +280,21 @@ button.calendar-day.selected-day {
   color: var(--muted);
   font-size: 13px;
   text-align: center;
+}
+
+.chat-history-button {
+  align-self: center;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #17243a;
+  color: #b7c8e8;
+  font-size: 11px;
+}
+
+.chat-history-button:not(:disabled):hover {
+  border-color: var(--blue);
+  color: #fff;
 }
 
 .chat-message {

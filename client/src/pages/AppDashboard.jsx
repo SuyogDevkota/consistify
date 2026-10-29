@@ -6,6 +6,7 @@ import MembersView from '../components/views/MembersView';
 import ProgressView from '../components/views/ProgressView';
 import CalendarView from '../components/views/CalendarView';
 import LeaderboardView from '../components/views/LeaderboardView';
+import CommunityChatView from '../components/views/CommunityChatView';
 import TaskFormModal from '../components/TaskFormModal';
 import InviteModal from '../components/InviteModal';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -175,7 +176,6 @@ export default function AppDashboard() {
       {view === 'dashboard' && (
         <OverviewView
           user={user}
-          groupId={activeGroupId}
           summary={data.summary}
           checklist={data.checklist}
           activity={data.activity}
@@ -279,6 +279,7 @@ export default function AppDashboard() {
           currentUserId={user.id}
         />
       )}
+      {view === 'community' && <CommunityChatView key={activeGroupId} groupId={activeGroupId} />}
 
       <TaskFormModal
         open={taskModal}

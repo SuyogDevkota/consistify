@@ -14,6 +14,7 @@ export const NAV_ITEMS = [
   { id: 'progress', label: 'Analytics', icon: '⌁' },
   { id: 'calendar', label: 'Calendar', icon: '▦' },
   { id: 'leaderboard', label: 'Leaderboard', icon: '♜' },
+  { id: 'community', label: 'Community chat', icon: 'chat' },
 ];
 
 export const VIEW_TITLES = {
@@ -23,4 +24,5 @@ export const VIEW_TITLES = {
   progress: 'Analytics',
   calendar: 'Calendar',
   leaderboard: 'Leaderboard',
+  community: 'Community chat',
 };

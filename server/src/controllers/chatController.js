@@ -1,4 +1,5 @@
 import multer from 'multer';
+import mongoose from 'mongoose';
 import { AppError } from '../utils/AppError.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { env } from '../config/env.js';
@@ -31,10 +32,14 @@ export const uploadChatFile = multer({
 }).single('file');
 
 export const list = asyncHandler(async (req, res) => {
+  const before = req.query.before;
+  if (before && !mongoose.isValidObjectId(before)) {
+    throw new AppError('Invalid chat history cursor', 400, 'INVALID_ID');
+  }
   res.json({
     success: true,
     data: {
-      messages: await chatService.listMessages(req.group._id),
+      ...await chatService.listMessages(req.group._id, before),
       mediaConfigured: env.mediaConfigured,
     },
   });

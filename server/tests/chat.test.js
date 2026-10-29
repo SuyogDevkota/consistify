@@ -1,5 +1,6 @@
 import { createAgent, registerUser, createGroup, csrfHeaders } from './helpers.js';
 import { createMessage, streamGroupMessages } from '../src/services/chatService.js';
+import { ChatMessage } from '../src/models/ChatMessage.js';
 
 describe('Community chat', () => {
   test('broadcasts newly created messages to connected group members', async () => {
@@ -114,5 +115,40 @@ describe('Community chat', () => {
       .set(headers)
       .send({ text: 'x'.repeat(2001) });
     expect(oversized.status).toBe(400);
+  });
+
+  test('paginates older messages without losing their author or order', async () => {
+    const owner = createAgent();
+    const registered = await registerUser(owner, { name: 'Owner' });
+    const created = await createGroup(owner, { name: 'Chat group' });
+    const groupId = created.body.data.group.id;
+    const start = new Date('2026-10-28T00:00:00.000Z');
+    await ChatMessage.insertMany(
+      Array.from({ length: 53 }, (_, index) => ({
+        group: groupId,
+        sender: registered.user.id,
+        text: `Message ${index}`,
+        createdAt: new Date(start.getTime() + index * 1000),
+        updatedAt: new Date(start.getTime() + index * 1000),
+      }))
+    );
+
+    const latest = await owner.get(`/api/v1/chat/${groupId}/messages`);
+    expect(latest.status).toBe(200);
+    expect(latest.body.data.messages).toHaveLength(50);
+    expect(latest.body.data.hasMore).toBe(true);
+    expect(latest.body.data.messages[0].text).toBe('Message 3');
+    expect(latest.body.data.messages[0].sender.name).toBe('Owner');
+
+    const earlier = await owner.get(
+      `/api/v1/chat/${groupId}/messages?before=${latest.body.data.messages[0].id}`
+    );
+    expect(earlier.status).toBe(200);
+    expect(earlier.body.data.messages.map(({ text }) => text)).toEqual([
+      'Message 0',
+      'Message 1',
+      'Message 2',
+    ]);
+    expect(earlier.body.data.hasMore).toBe(false);
   });
 });
